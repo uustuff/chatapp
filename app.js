@@ -1,4 +1,4 @@
-const ws = new WebSocket('ws://192.168.31.200:3000');
+const ws = new WebSocket('ws://chat-backend-h3jf.onrender.com');
 
 const chatWindow = document.getElementById('chat-window');
 const output = document.getElementById('output');
