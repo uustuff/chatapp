@@ -1,0 +1,102 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(90deg, rgba(255,0,0,1) 0%,rgba(255,154,0,1) 10%,rgba(208,222,33,1) 20%,rgba(79,220,74,1) 30%,rgba(63,218,216,1) 40%,rgba(47,201,226,1) 50%,rgba(28,127,238,1) 60%,rgba(28,127,238,1) 70%,rgba(95,21,242,1) 80%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#chat-container {
+    user-select: none;
+    height:90%;
+    width: 85%;
+    background:linear-gradient(to left,  #1469a7,#166196, #125d92, #093250);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#chat-window {
+    background-color: #2c76ac;
+    height: 80%;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: inset 0px 0px 10px black;
+}
+
+#output {
+    margin-bottom: 20px;
+}
+p{
+    background: rgb(127, 199, 223);
+    display: inline-block;
+    width:90%;
+    border: 1px solid navy;
+    border-radius: 10px;
+    padding: 10px 10px 10px 5px;
+    box-shadow: 0 0 5px navy;
+}
+
+
+#username {
+    color: black;
+    box-shadow:  0px 0px 10px rgb(6, 117, 30);
+    background-color: #2579b4;
+    width: calc(60% - 80px); /* Adjust width based on your layout */
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 15px;
+    border: 1px solid #ccc;
+}
+
+#message {
+    width: calc(80% - 80px); /* Adjust width based on your layout */
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#send {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 5px 0;
+    padding: 10px;
+    background: #5cb85c;
+    color: white;
+    cursor: pointer;
+}
+
+#send:hover {
+    background: #4cae4c;
+}
+
+.delete-message {
+    color: red;
+    cursor: pointer;
+    margin-left: 10px;
+}
+#admin-login-btn{
+    text-shadow: 0 0 10px #00881d;
+    font-weight: bolder;
+    font-family:'Courier New', Courier, monospace;
+    border-radius: 5px;
+    padding: 8px;
+}
+
+::-webkit-scrollbar{
+    width: 5px;
+    height:5px;
+}
+::-webkit-scrollbar-track{
+    box-shadow: inset 0 0 5px rgb(6, 93, 173);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg,rgba(255,154,0,1) 10%,rgba(208,222,33,1) 20%,rgba(79,220,74,1) 30%,rgba(63,218,216,1) 40%,rgba(47,201,226,1) 50%,rgba(28,127,238,1) 60%,rgba(28,127,238,1) 70%,rgba(95,21,242,1) 80%);
+    border-radius: 10px;
+}
