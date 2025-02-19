@@ -10,8 +10,8 @@ body {
 
 #chat-container {
     user-select: none;
-    height:90%;
-    max-width: 60%;
+    height:85%;
+    max-width: 80%;
     background-color: rgb(32, 32, 32);
     padding: 20px;
     border-radius: 10px;
