@@ -31,6 +31,18 @@ body {
 #output {
     margin-bottom: 20px;
 }
+#ti{
+    color: rgb(193,193,193);
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    width: auto;
+    border-radius: 0%;
+    box-shadow: none;
+}
+em{
+    font-family: monospace;
+}
 p{
     color: rgb(193, 193, 193);
     background: rgb(30, 30, 30);

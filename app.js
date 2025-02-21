@@ -1,4 +1,4 @@
-const ws = new WebSocket('ws://chat-backend-h3jf.onrender.com');
+const ws = new WebSocket('ws://192.168.31.86:3000');
 
 const chatWindow = document.getElementById('chat-window');
 const output = document.getElementById('output');
@@ -10,11 +10,11 @@ const adminLoginButton = document.getElementById('admin-login-btn');
 
 let username = localStorage.getItem('username') || '';
 let isAdmin = false;
+let typingTimeout = null;
 
 if (username) {
     usernameInput.value = username;
     usernameInput.disabled = true;
-    // Example condition: Show admin login button if username is already set
     adminLoginButton.style.display = 'inline-block';
 }
 
@@ -22,7 +22,7 @@ usernameInput.addEventListener('blur', () => {
     username = usernameInput.value;
     localStorage.setItem('username', username);
     usernameInput.disabled = true;
-    // Example condition: Show admin login button if username is entered
+
     if (username.trim()) {
         adminLoginButton.style.display = 'inline-block';
     } else {
@@ -45,7 +45,7 @@ adminLoginButton.addEventListener('click', () => {
 });
 
 function sendMessage() {
-    const message = messageInput.value.trim(); // Ensure no leading or trailing spaces
+    const message = messageInput.value.trim();
     if (message && username) {
         ws.send(JSON.stringify({
             type: 'user',
@@ -53,6 +53,8 @@ function sendMessage() {
             message: message
         }));
         messageInput.value = '';
+
+        ws.send(JSON.stringify({ type: 'stop-typing', username })); // Stop typing when sent
     }
 }
 
@@ -65,7 +67,6 @@ function adminLogin() {
     }));
 }
 
-// Function to handle message deletion by admin
 function deleteMessage(messageId) {
     if (isAdmin) {
         ws.send(JSON.stringify({
@@ -75,17 +76,27 @@ function deleteMessage(messageId) {
     }
 }
 
+messageInput.addEventListener('input', () => {
+    if (!username) return;
+
+    ws.send(JSON.stringify({ type: 'typing', username }));
+
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+        ws.send(JSON.stringify({ type: 'stop-typing', username }));
+    }, 10000);
+});
+
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
+
     if (data.type === 'init') {
-        // Handle initial messages
         output.innerHTML = data.messages.map(msg => formatMessage(msg)).join('');
     } else if (data.type === 'user' || data.type === 'system') {
         feedback.innerHTML = '';
         output.innerHTML += formatMessage(data);
         chatWindow.scrollTop = chatWindow.scrollHeight;
     } else if (data.type === 'delete-message') {
-        // Handle message deletion
         const deletedMessage = document.getElementById(`msg-${data.messageId}`);
         if (deletedMessage) {
             deletedMessage.remove();
@@ -93,33 +104,40 @@ ws.onmessage = (event) => {
     } else if (data.type === 'admin-login-success') {
         isAdmin = true;
         alert('Admin login successful.');
-        // Show delete options for all existing messages
         document.querySelectorAll('.delete-message').forEach(button => {
             button.style.display = 'inline';
         });
     } else if (data.type === 'admin-login-failed') {
         alert('Admin login failed. Incorrect password.');
+    } else if (data.type === 'typing') {
+        if (data.username !== username) { // Hide for self
+            feedback.innerHTML = `<p id="ti"><em>${data.username} is typing...</em></p>`;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+    } else if (data.type === 'stop-typing') {
+        if (data.username !== username) { // Hide for self
+            feedback.innerHTML = '';
+        }
     }
 };
 
 function formatMessage(msg) {
     let messageContent = `<p id="msg-${msg.id}"><strong>${msg.username ? msg.username : ''}</strong>`;
-    
+
     if (msg.isAdmin) {
         messageContent += ` (admin):`;
     } else {
         messageContent += `:`;
     }
-    
+
     messageContent += ` ${msg.message}`;
-    
-    // Check if user is admin, then add delete functionality
+
     if (isAdmin || msg.type === 'user') {
         messageContent += ` <span class="delete-message" onclick="deleteMessage('${msg.id}')" style="display: ${isAdmin ? 'inline' : 'none'}">Delete</span>`;
     }
-    
+
     messageContent += `</p>`;
-    
+
     return messageContent;
 }
 

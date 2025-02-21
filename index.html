@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Closebook inc.</title>
     <link rel="stylesheet" href="styles.css">
@@ -11,8 +10,8 @@
     <div id="chat-container">
         <div id="chat-window">
             <div id="output"></div>
+            <div id="feedback"></div> <!-- Typing indicator inside chat window -->
         </div>
-        <div id="feedback"></div>
         <input type="text" id="username" placeholder="Enter your username">
         <button id="admin-login-btn" style="display: none;">Login as Admin</button>
         <input type="text" id="message" placeholder="Type your message" autocomplete="off">
