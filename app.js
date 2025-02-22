@@ -1,4 +1,4 @@
-const ws = new WebSocket('ws://chat-backend-h3jf.onrender.com');
+const ws = new WebSocket('ws://192.168.31.86:3000');
 
 const chatWindow = document.getElementById('chat-window');
 const output = document.getElementById('output');
@@ -7,6 +7,16 @@ const messageInput = document.getElementById('message');
 const usernameInput = document.getElementById('username');
 const sendButton = document.getElementById('send');
 const adminLoginButton = document.getElementById('admin-login-btn');
+
+// Create notification container
+document.body.insertAdjacentHTML('afterbegin', '<div id="notification-container"></div>');
+const notificationContainer = document.getElementById('notification-container');
+notificationContainer.style.position = 'fixed';
+notificationContainer.style.top = '10px';
+notificationContainer.style.left = '50%';
+notificationContainer.style.transform = 'translateX(-50%)';
+notificationContainer.style.zIndex = '1000';
+notificationContainer.style.maxWidth = '300px';
 
 let username = localStorage.getItem('username') || '';
 let isAdmin = false;
@@ -96,6 +106,11 @@ ws.onmessage = (event) => {
         feedback.innerHTML = '';
         output.innerHTML += formatMessage(data);
         chatWindow.scrollTop = chatWindow.scrollHeight;
+
+        // Check if user is mentioned and show notification
+        if (data.message.includes(`@${username}`)) {
+            showNotification(`You were mentioned by ${data.username}`);
+        }
     } else if (data.type === 'delete-message') {
         const deletedMessage = document.getElementById(`msg-${data.messageId}`);
         if (deletedMessage) {
@@ -139,6 +154,25 @@ function formatMessage(msg) {
     messageContent += `</p>`;
 
     return messageContent;
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.textContent = message;
+    notification.style.background = 'rgba(0,0,0,0.8)';
+    notification.style.color = 'white';
+    notification.style.padding = '10px';
+    notification.style.margin = '5px';
+    notification.style.borderRadius = '5px';
+    notification.style.textAlign = 'center';
+    notification.style.opacity = '1';
+    notification.style.transition = 'opacity 2s ease-out';
+    
+    notificationContainer.appendChild(notification);
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 2000);
+    }, 3000);
 }
 
 ws.onerror = (error) => {

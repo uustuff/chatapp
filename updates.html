@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App Updates</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: #1e1e1e;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            color: #f39c12;
+            text-align: center;
+            animation: glow 1.5s infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #f39c12; }
+            to { text-shadow: 0 0 20px #f39c12, 0 0 30px #ff9d00; }
+        }
+        .update, .previous-update {
+            padding: 15px;
+            border-left: 4px solid #f39c12;
+            margin-bottom: 20px;
+            background: #292929;
+            border-radius: 5px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .update:hover, .previous-update:hover {
+            transform: scale(1.02);
+        }
+        .roadmap {
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 20px;
+            background: #292929;
+            border-radius: 5px;
+        }
+        .version-badge {
+            display: inline-block;
+            background: #f39c12;
+            color: #121212;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .bug-list {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        .bug-list li::before {
+            content: "🐞 ";
+            font-size: 1.2em;
+        }
+        .expandable {
+            cursor: pointer;
+            font-weight: bold;
+            color: #f39c12;
+        }
+        .hidden {
+            display: none;
+        }
+        #rickroll-btn {
+            background: linear-gradient(45deg, #ff0000, #ff7300);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.5);
+            transition: all 0.3s ease-in-out;
+            outline: none;
+        }
+
+        #rickroll-btn:hover {
+            background: linear-gradient(45deg, #ff7300, #ff0000);
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 6px 15px rgba(255, 0, 0, 0.7);
+        }
+
+        #rickroll-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(255, 0, 0, 0.5);
+        }
+        /* Secret Konami Mode */
+        .konami-activated {
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ff0000, #00ff00);
+            animation: neonGlow 1s infinite alternate;
+        }
+
+        @keyframes neonGlow {
+            from { box-shadow: 0 0 10px #ff00ff; }
+            to { box-shadow: 0 0 20px #00ffff; }
+        }
+
+        /* Secret GIF (optional) */
+        #secret-gif {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: auto;
+            z-index: 999;
+        }
+
+        /* Hacker Mode - Turns Background Green */
+        .hacker-mode {
+            background: black !important;
+            color: #00ff00 !important;
+            font-family: 'Courier New', monospace !important;
+            text-shadow: 0 0 5px #00ff00;
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* Fake Terminal */
+        #hacker-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            overflow: hidden;
+            z-index: 9999;
+            text-align: left;
+            white-space: pre-wrap;
+            padding: 20px;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0, 0); opacity: 1; }
+            15% { transform: translate(-3px, -3px) skew(-3deg); opacity: 0.8; filter: hue-rotate(10deg); }
+            30% { transform: translate(3px, 3px) skew(3deg); opacity: 1; filter: hue-rotate(-10deg); }
+            45% { transform: translate(-3px, 3px) skew(-2deg); opacity: 0.9; }
+            60% { transform: translate(3px, -3px) skew(2deg); opacity: 1; }
+            75% { transform: translate(-2px, 2px) skew(-1deg); opacity: 0.8; }
+            100% { transform: translate(0, 0); opacity: 1; }
+        }
+
+        @keyframes rgbShift {
+            0% { text-shadow: 2px 0px 0px red, -2px 0px 0px blue; }
+            50% { text-shadow: -2px 0px 0px red, 2px 0px 0px blue; }
+            100% { text-shadow: 2px 0px 0px red, -2px 0px 0px blue; }
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            40% { opacity: 0.8; }
+            60% { opacity: 0.6; }
+        }
+
+        .glitch {
+            animation: glitch 0.2s infinite, rgbShift 0.1s infinite alternate, flicker 0.1s infinite alternate;
+        }
+
+        /* Extra CRT Scanline Effect */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0) 0px,
+                rgba(0, 0, 0, 0) 2px,
+                rgba(0, 0, 0, 0.05) 4px
+            );
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.2;
+        }
+
+
+    </style>
+    <script>
+        function toggleUpdates(id) {
+            var element = document.getElementById(id);
+            if (element.classList.contains("hidden")) {
+                element.classList.remove("hidden");
+            } else {
+                element.classList.add("hidden");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Chat App Updates</h1>
+        <p>Welcome to the update page! Here you can check out the latest changes, upcoming features, and our roadmap. Stay tuned! 🛠️</p>
+        
+        <h2>📢 Latest Updates - <span class="version-badge">Version 0.1.2</span> (Feb 22, 2025)</h2>
+        <div class="update">
+            <p><strong>🔔 Mention Notifications:</strong> You’ll now receive in-app notifications when someone mentions you! No more missing important messages.</p>
+            <p><strong>🔴 Highlighted Mentions:</strong> When you mention a valid user with @username, it now turns red (only if the user exists).</p>
+            <p><strong>📜 Message Deletion:</strong> Admins can now delete messages instantly.</p>
+            <h4>🐞 Bug Fixes:</h4>
+            <ul class="bug-list">
+                <li>Fixed message delay issue.</li>
+                <li>Improved WebSocket connection stability.</li>
+                <li>Fixed minor UI glitches in chat interface.</li>
+            </ul>
+        </div>
+        
+        <h2>🔮 What's Coming Next?</h2>
+        <div class="roadmap">
+            <p><strong>👤 Private Messaging:</strong> Soon, you’ll be able to send direct messages to other users!</p>
+            <p><strong>📂 File Sharing:</strong> Upload and share images and files in the chat.</p>
+            <p><strong>🎭 Custom Avatars:</strong> Choose and personalize your profile picture.</p>
+            <p><strong>📡 Improved WebSocket Performance:</strong> Faster message delivery and real-time sync improvements.</p>
+        </div>
+        
+        <h2 class="expandable" onclick="toggleUpdates('previous-updates')">📜 Previous Updates (Click to Expand) 🔽</h2>
+        <div id="previous-updates" class="hidden">
+            <div class="previous-update">
+                <h3><span class="version-badge">Version 0.1.1</span> (Feb 15, 2025)</h3>
+                <p><strong>🌐 Online Users List:</strong> Added a sidebar showing all currently online users.</p>
+                <p><strong>💬 Command "!online":</strong> Users can now type "!online" to see a list of online members.</p>
+                <p><strong>👑 Admin button:</strong> Admins can login using admin password to moderate the chat.</p>
+                <h4>🐞 Bug Fixes:</h4>
+                <ul class="bug-list">
+                    <li>Fixed username persistence issues.</li>
+                    <li>Enhanced chat input responsiveness.</li>
+                </ul>
+            </div>
+            <div class="previous-update">
+                <h3><span class="version-badge">Version 0.1.0</span> (Feb 1, 2025)</h3>
+                <p><strong>🚀 Initial Release:</strong> Basic chat functionality with WebSockets, message sending, and admin moderation.</p>
+                <h4>🐞 Bug Fixes:</h4>
+                <ul class="bug-list">
+                    <li>Fixed login authentication glitches.</li>
+                    <li>Resolved minor lag in message rendering.</li>
+                </ul>
+            </div>
+        <h2>🔽 Hidden Surprise</h2>
+        <button id="rickroll-btn">Don't Click Me</button>
+        </div>
+        
+        <p>🚀 Stay tuned for more updates! Follow us for real-time changes and suggestions.</p>
+    </div>
+    <script>
+            // Console easter egg
+            setTimeout(() => {
+                console.log("%cHey there, curious Hacker! 🚀", "color: #f39c12; font-size: 18px;");
+                console.log("Want to contribute? Reach out to us!");
+            }, 1000);
+            // Rickroll Easter Egg
+            document.getElementById("rickroll-btn").addEventListener("click", function () {
+                window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+            });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                let keys = [];
+                const konamiCode = "38384040373937396665"; // ↑ ↑ ↓ ↓ ← → ← → B A
+
+                document.addEventListener("keydown", function (e) {
+                    keys.push(e.keyCode);
+                    keys = keys.slice(-10); // Keep last 10 key presses
+
+                    if (keys.join("") === konamiCode) {
+                        document.body.classList.add("konami-activated");
+
+                        alert("🎮 Konami Code Activated! Welcome to the secret mode!");
+
+                        // Show a hidden dancing GIF (optional)
+                        let gif = document.createElement("img");
+                        gif.src = "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"; // Dancing GIF
+                        gif.id = "secret-gif";
+                        document.body.appendChild(gif);
+                        gif.style.display = "block";
+
+                        setTimeout(() => {
+                            gif.style.display = "none"; // Hide after 10 seconds
+                        }, 10000);
+                    }
+                });
+            });
+            document.addEventListener("DOMContentLoaded", function () {
+                let hackerModeActive = false;
+                let tapCount = 0;
+                let tapTimeout;
+
+                // PC: Keyboard Activation
+                document.addEventListener("keydown", function (e) {
+                    if (e.ctrlKey && e.altKey && e.code === "KeyH") {
+                        if (!hackerModeActive) {
+                            activateHackerMode();
+                        }
+                    }
+                });
+
+                // Mobile: Triple Tap OR Long Press on Title
+                let title = document.querySelector("h1");
+
+                title.addEventListener("touchstart", function (e) {
+                    tapCount++;
+                    if (tapCount === 1) {
+                        tapTimeout = setTimeout(() => (tapCount = 0), 1000); // Reset tap count after 1 sec
+                    }
+                    if (tapCount === 3) {
+                        clearTimeout(tapTimeout);
+                        tapCount = 0;
+                        if (!hackerModeActive) activateHackerMode();
+                    }
+                });
+
+                let longPressTimer;
+                title.addEventListener("touchstart", function () {
+                    longPressTimer = setTimeout(() => {
+                        if (!hackerModeActive) activateHackerMode();
+                    }, 2000); // 2 seconds long press
+                });
+
+                title.addEventListener("touchend", function () {
+                    clearTimeout(longPressTimer);
+                });
+
+                function activateHackerMode() {
+                    hackerModeActive = true;
+                    document.body.classList.add("hacker-mode");
+
+                    let hackerScreen = document.createElement("div");
+                    hackerScreen.id = "hacker-screen";
+                    document.body.appendChild(hackerScreen);
+                    hackerScreen.style.display = "block";
+
+                    let logLines = [
+                        "[ACCESS GRANTED] Initializing terminal...",
+                        "Connecting to main server...",
+                        "Bypassing firewall... ███████░ 85%",
+                        "Decrypting passwords... ████████░ 95%",
+                        "Accessing chat database...",
+                        "Extracting user credentials...",
+                        "Uploading malware... (just kidding 😆)",
+                        "Self-destruct sequence initiated... (jk again!)",
+                        "Returning to normal mode..."
+                    ];
+
+                    let index = 0;
+                    function showHackerText() {
+                        if (index < logLines.length) {
+                            let textLine = document.createElement("p");
+                            textLine.textContent = logLines[index];
+                            hackerScreen.appendChild(textLine);
+                            index++;
+                            setTimeout(showHackerText, 3000);
+                        } else {
+                            setTimeout(deactivateHackerMode, 5000);
+                        }
+                    }
+                    
+                    showHackerText();
+                }
+
+                function deactivateHackerMode() {
+                    document.body.classList.remove("hacker-mode");
+                    let hackerScreen = document.getElementById("hacker-screen");
+                    if (hackerScreen) {
+                        hackerScreen.remove();
+                    }
+                    hackerModeActive = false;
+                }
+            });
+            document.addEventListener("DOMContentLoaded", function () {
+                let elementsToGlitch = document.querySelectorAll("h1, h2, p, .update, .roadmap");
+                let glitchDuration = 5000; // 5 seconds
+                let startTime = Date.now();
+
+                function applyGlitchEffect() {
+                    if (Date.now() - startTime > glitchDuration) return; // Stop after 5 seconds
+
+                    let randomElements = [...elementsToGlitch].sort(() => 0.5 - Math.random()).slice(0, 3); // Select 3 random elements
+                    randomElements.forEach(el => {
+                        el.classList.add("glitch");
+                        setTimeout(() => el.classList.remove("glitch"), 500 + Math.random() * 1000); // Remove after 0.5-1.5s
+                    });
+
+                    setTimeout(applyGlitchEffect, 500 + Math.random() * 1000); // Repeat within the 5s window
+                }
+
+                applyGlitchEffect();
+            });
+
+
+            document.addEventListener("keydown", function (event) {
+                if (event.ctrlKey && event.altKey && event.key.toLowerCase() === "p") {
+                    let command = prompt("🐍 Python Console - Enter a command:");
+                    if (command) {
+                        executePythonCommand(command);
+                    }
+                }
+            });
+
+            function executePythonCommand(command) {
+                let output;
+                try {
+                    if (command.startsWith("print(")) {
+                        output = command.match(/print\(["'](.+?)["']\)/)[1];
+                    } else if (command.startsWith("math(")) {
+                        output = eval(command.match(/math\((.+?)\)/)[1]);
+                    } else if (command.startsWith("reverse(")) {
+                        output = command.match(/reverse\(["'](.+?)["']\)/)[1].split("").reverse().join("");
+                    } else if (command === "secret()") {
+                        output = "🕵️ You found the hidden message!";
+                    } else {
+                        output = "⚠️ Unknown command!";
+                    }
+                } catch {
+                    output = "⚠️ Syntax Error!";
+                }
+                alert(output);
+            }
+
+    </script>
+</body>
+</html>

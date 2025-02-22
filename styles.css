@@ -106,12 +106,22 @@ p{
     #chat-container{
         max-width: 90%;
     }
+    a {
+        font-size: xx-small;
+    }
 }
 strong{
     color: rgb(171, 45, 45);
 }
 #send:hover {
     background: #4cae4c;
+}
+
+a {
+    text-decoration: none;
+    color:black;
+    background-color: #f39c12;
+    box-shadow: 0px 0px 5px white;
 }
 
 .delete-message {
