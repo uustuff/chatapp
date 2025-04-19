@@ -1,7 +1,6 @@
 body {
     font-family: Arial, sans-serif;
     background: linear-gradient(120deg, #011305, #00062d, #071501);
-
     animation: bodyGradientMove 12s ease infinite;
     display: flex;
     justify-content: center;
@@ -10,6 +9,7 @@ body {
     margin: 0;
     background-size: 200% 200%;
 }
+
 @keyframes bodyGradientMove {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -19,7 +19,7 @@ body {
 #chat-container {
     animation: gradientMove 6s ease infinite;
     user-select: none;
-    height:90%;
+    height: 90%;
     width: 80%;
     background: linear-gradient(60deg, #003052, #004d3b, #002a52, #750131);
     padding: 20px;
@@ -27,6 +27,7 @@ body {
     box-shadow: 0 0 30px rgba(18, 84, 98, 0.377);
     backdrop-filter: blur(8px);
     background-size: 400% 400%;
+    position: relative;
 }
 
 @keyframes gradientMove {
@@ -35,14 +36,12 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-
 #chat-window {
-
     background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0,0,0,0.2)), url('bg2.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-color:#2c2c2c;
+    background-color: #2c2c2c;
     height: 80%;
     overflow-y: auto;
     margin-bottom: 10px;
@@ -50,12 +49,18 @@ body {
     border: 1px solid #000000;
     padding: 10px;
     box-shadow: inset 0 0 12px rgba(0, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
 #output {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     margin-bottom: 20px;
 }
-#ti{
+
+#ti {
     color: #ccc;
     border: none;
     background-color: transparent;
@@ -64,15 +69,18 @@ body {
     border-radius: 0%;
     box-shadow: none;
 }
-em{
+
+em {
     font-family: 'Courier New', Courier, monospace;
-    color: #aaa;
+    color: #ffffff;
+    border: 1px solid black;
 }
-p {
+
+.message-other {
     color: rgb(193, 193, 193);
     background: rgb(12, 88, 43);
-    display: inline-block;
-    margin-bottom: 5px;
+    align-self: flex-start;
+    text-align: left;
     border: 1px solid rgb(0, 0, 0);
     border-radius: 10px;
     padding: 10px 15px;
@@ -85,19 +93,32 @@ p {
     box-shadow: 0 0 8px rgba(0, 255, 170, 0.2);
 }
 
-/* This makes each message stack properly */
-#output > p {
-    display: block;
-    width: fit-content;
+.message-self {
+    color: rgb(193, 193, 193);
+    background: rgb(88, 12, 43);
+    align-self: flex-end;
+    text-align: right;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 10px;
+    padding: 10px 15px;
+    box-shadow: 0 0 5px rgb(0, 0, 0);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 70%;
+    min-width: 40px;
+    box-shadow: 0 0 8px rgba(255, 0, 170, 0.2);
 }
 
-
+.message-admin {
+    border-left: 3px solid gold;
+}
 
 #username {
     color: #e6e6e6;
-    box-shadow:  0px 0px 10px rgb(0, 0, 0);
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
     background-color: #2d2d2d;
-    width: calc(60% - 80px); /* Adjust width based on your layout */
+    width: calc(60% - 80px);
     padding: 10px;
     margin: 5px 0;
     border-radius: 15px;
@@ -107,14 +128,15 @@ p {
 
 #message {
     background-color: #bcbcbc;
-    width: calc(80% - 80px); /* Adjust width based on your layout */
+    width: calc(80% - 80px);
     padding: 10px;
     margin: 5px 0;
     border-radius: 5px;
     border: 1px solid #000000;
     transition: 0.3s;
 }
-#message::placeholder{
+
+#message::placeholder {
     color: #020202;
 }
 
@@ -123,46 +145,45 @@ p {
     border: 1px solid #ccc;
     margin: 5px 0;
     padding: 10px;
-    background:#39aaca;
+    background: #39aaca;
     color: #000;
     cursor: pointer;
     transition: background-color 0.2s;
-    cursor: pointer;
 }
-@media (max-width: 768px){
-    #username{
-        font-size: large;
-    }
-    p{
-        font-size: large;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    strong{
-        color: #ff5555;
-    }
-    
-    #admin-login-btn{
-        font-size:medium;
-    }
-    #chat-container{
-        max-width: 90%;
-    }
-    a {
-        font-size: xx-small;
-    }
-}
-strong{
-    color: #ff5555;
-}
+
 #send:hover {
     background: #61dafb;
 }
 
-a {
-    text-decoration: none;
-    color:black;
-    background-color: #f39c12;
-    box-shadow: 0px 0px 5px white;
+@media (max-width: 768px) {
+    #username {
+        font-size: large;
+    }
+    
+    .message-other, .message-self {
+        font-size: large;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    strong {
+        color: #ff5555;
+    }
+    
+    #admin-login-btn {
+        font-size: medium;
+    }
+    
+    #chat-container {
+        max-width: 90%;
+    }
+    
+    a {
+        font-size: xx-small;
+    }
+}
+
+strong {
+    color: #ff5555;
 }
 
 .delete-message {
@@ -170,6 +191,7 @@ a {
     cursor: pointer;
     margin-left: 10px;
 }
+
 #admin-login-btn {
     background-color: #333;
     color: #ddd;
@@ -181,20 +203,23 @@ a {
     transition: 0.2s;
     border-radius: 10px;
 }
+
 #admin-login-btn:hover {
     background-color: #444;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     width: 10px;
-    height:5px;
+    height: 5px;
 }
-::-webkit-scrollbar-track{
+
+::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px rgb(0, 0, 0);
     border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg,rgb(151, 94, 8) 10%,rgb(138, 147, 14) 20%,rgba(79,220,74,1) 30%,rgba(63,218,216,1) 40%,rgba(47,201,226,1) 50%,rgba(28,127,238,1) 60%,rgb(19, 98, 189) 70%,rgb(68, 0, 203) 80%);
+    background: linear-gradient(135deg, rgb(151, 94, 8) 10%, rgb(138, 147, 14) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgb(19, 98, 189) 70%, rgb(68, 0, 203) 80%);
     border-radius: 10px;
 }
 
@@ -246,4 +271,67 @@ a {
     41% { transform: rotate(1deg); }
     43% { transform: rotate(0); }
     100% { transform: rotate(0); }
+}
+
+#notification-container {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    max-width: 300px;
+}
+
+.notification {
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    text-align: center;
+    opacity: 1;
+    transition: opacity 2s ease-out;
+}
+
+/* Mention suggestions styles */
+#suggestions-container {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    border: 1px solid #444;
+}
+
+#suggestions-list {
+    padding: 5px;
+}
+
+.suggestion-item {
+    padding: 8px 12px;
+    color: #eee;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.suggestion-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.suggestion-item.highlighted {
+    background-color: rgba(66, 139, 202, 0.7);
+}
+
+.mention-highlight {
+    color: #ffcc00;
+    font-weight: bold;
+    background-color: rgba(255, 204, 0, 0.1);
+    padding: 0 2px;
+    border-radius: 3px;
 }

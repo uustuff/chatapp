@@ -1,4 +1,4 @@
-const ws = new WebSocket('ws://chat-backend-h3jf.onrender.com');
+const ws = new WebSocket('ws://192.168.31.86:3000');
 
 const chatWindow = document.getElementById('chat-window');
 const output = document.getElementById('output');
@@ -7,20 +7,18 @@ const messageInput = document.getElementById('message');
 const usernameInput = document.getElementById('username');
 const sendButton = document.getElementById('send');
 const adminLoginButton = document.getElementById('admin-login-btn');
+const suggestionsContainer = document.getElementById('suggestions-container');
+const suggestionsList = document.getElementById('suggestions-list');
 
-// Create notification container
 document.body.insertAdjacentHTML('afterbegin', '<div id="notification-container"></div>');
 const notificationContainer = document.getElementById('notification-container');
-notificationContainer.style.position = 'fixed';
-notificationContainer.style.top = '10px';
-notificationContainer.style.left = '50%';
-notificationContainer.style.transform = 'translateX(-50%)';
-notificationContainer.style.zIndex = '1000';
-notificationContainer.style.maxWidth = '300px';
 
 let username = localStorage.getItem('username') || '';
 let isAdmin = false;
 let typingTimeout = null;
+let onlineUsersList = [];
+let lastAtPosition = -1;
+let suggestionsVisible = false;
 
 if (username) {
     usernameInput.value = username;
@@ -41,7 +39,7 @@ usernameInput.addEventListener('blur', () => {
 });
 
 messageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !suggestionsVisible) {
         sendMessage();
     }
 });
@@ -54,6 +52,115 @@ adminLoginButton.addEventListener('click', () => {
     adminLogin();
 });
 
+messageInput.addEventListener('input', handleMessageInput);
+
+function handleMessageInput(e) {
+    if (!username) return;
+
+    // Typing indicator logic
+    ws.send(JSON.stringify({ type: 'typing', username }));
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+        ws.send(JSON.stringify({ type: 'stop-typing', username }));
+    }, 10000);
+
+    // Mention suggestion logic
+    const cursorPos = messageInput.selectionStart;
+    const text = messageInput.value;
+    const atPos = text.lastIndexOf('@', cursorPos);
+
+    if (atPos >= 0 && (cursorPos === atPos + 1 || /^[\w\d]$/.test(text.charAt(atPos + 1)))) {
+        lastAtPosition = atPos;
+        const partial = text.substring(atPos + 1, cursorPos);
+        showSuggestions(partial);
+    } else if (suggestionsVisible) {
+        hideSuggestions();
+    }
+}
+
+function showSuggestions(partial) {
+    if (!onlineUsersList.length) {
+        hideSuggestions();
+        return;
+    }
+
+    const filtered = onlineUsersList.filter(user => 
+        user.toLowerCase().includes(partial.toLowerCase()) && user !== username
+    );
+
+    if (!filtered.length) {
+        hideSuggestions();
+        return;
+    }
+
+    suggestionsList.innerHTML = filtered.map(user => `
+        <div class="suggestion-item" data-username="${user}">@${user}</div>
+    `).join('');
+
+    suggestionsContainer.style.display = 'block';
+    suggestionsVisible = true;
+
+    document.querySelectorAll('.suggestion-item').forEach(item => {
+        item.addEventListener('click', () => {
+            selectSuggestion(item.dataset.username);
+        });
+    });
+}
+
+function hideSuggestions() {
+    suggestionsContainer.style.display = 'none';
+    suggestionsVisible = false;
+}
+
+function selectSuggestion(selectedUsername) {
+    const input = messageInput;
+    const text = input.value;
+    const newText = text.substring(0, lastAtPosition) + '@' + selectedUsername + ' ' + text.substring(input.selectionStart);
+    
+    input.value = newText;
+    hideSuggestions();
+    input.focus();
+    input.selectionStart = input.selectionEnd = lastAtPosition + selectedUsername.length + 2;
+}
+
+messageInput.addEventListener('keydown', (e) => {
+    if (!suggestionsVisible) return;
+
+    const items = document.querySelectorAll('.suggestion-item');
+    if (!items.length) return;
+
+    let currentIndex = -1;
+    items.forEach((item, index) => {
+        if (item.classList.contains('highlighted')) {
+            currentIndex = index;
+            item.classList.remove('highlighted');
+        }
+    });
+
+    if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+        items[nextIndex].classList.add('highlighted');
+        items[nextIndex].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+        items[prevIndex].classList.add('highlighted');
+        items[prevIndex].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter' && currentIndex >= 0) {
+        e.preventDefault();
+        selectSuggestion(items[currentIndex].dataset.username);
+    } else if (e.key === 'Escape') {
+        hideSuggestions();
+    }
+});
+
+document.addEventListener('click', (e) => {
+    if (suggestionsVisible && !e.target.closest('#suggestions-container') && e.target !== messageInput) {
+        hideSuggestions();
+    }
+});
+
 function sendMessage() {
     const message = messageInput.value.trim();
     if (message && username) {
@@ -63,8 +170,8 @@ function sendMessage() {
             message: message
         }));
         messageInput.value = '';
-
-        ws.send(JSON.stringify({ type: 'stop-typing', username })); // Stop typing when sent
+        ws.send(JSON.stringify({ type: 'stop-typing', username }));
+        hideSuggestions();
     }
 }
 
@@ -86,28 +193,62 @@ function deleteMessage(messageId) {
     }
 }
 
-messageInput.addEventListener('input', () => {
-    if (!username) return;
+function formatMessage(msg) {
+    const isCurrentUser = msg.username === username;
+    let messageClass = isCurrentUser ? 'message-self' : 'message-other';
+    
+    if (msg.isAdmin) {
+        messageClass += ' message-admin';
+    }
+    
+    // Highlight mentions in the message
+    let formattedMessage = msg.message.replace(/@(\w+)/g, (match, username) => {
+        const isOnline = onlineUsersList.includes(username);
+        return `<span class="mention-highlight" ${isOnline ? 'title="User is online"' : ''}>@${username}</span>`;
+    });
 
-    ws.send(JSON.stringify({ type: 'typing', username }));
+    let messageContent = `<div class="${messageClass}" id="msg-${msg.id}"><strong>${msg.username ? msg.username : ''}</strong>`;
 
-    clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(() => {
-        ws.send(JSON.stringify({ type: 'stop-typing', username }));
-    }, 10000);
-});
+    if (msg.isAdmin) {
+        messageContent += ` (admin):`;
+    } else {
+        messageContent += `:`;
+    }
+
+    messageContent += ` ${formattedMessage}`;
+
+    if (isAdmin || msg.type === 'user') {
+        messageContent += ` <span class="delete-message" onclick="deleteMessage('${msg.id}')" style="display: ${isAdmin ? 'inline' : 'none'}">Delete</span>`;
+    }
+
+    messageContent += `</div>`;
+
+    return messageContent;
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    notificationContainer.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 2000);
+    }, 3000);
+}
 
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
     if (data.type === 'init') {
         output.innerHTML = data.messages.map(msg => formatMessage(msg)).join('');
+        chatWindow.scrollTop = chatWindow.scrollHeight;
     } else if (data.type === 'user' || data.type === 'system') {
         feedback.innerHTML = '';
         output.innerHTML += formatMessage(data);
         chatWindow.scrollTop = chatWindow.scrollHeight;
 
-        // Check if user is mentioned and show notification
         if (data.message.includes(`@${username}`)) {
             showNotification(`You were mentioned by ${data.username}`);
         }
@@ -118,67 +259,33 @@ ws.onmessage = (event) => {
         }
     } else if (data.type === 'admin-login-success') {
         isAdmin = true;
-        alert('Admin login successful.');
+        showNotification('Admin login successful');
         document.querySelectorAll('.delete-message').forEach(button => {
             button.style.display = 'inline';
         });
     } else if (data.type === 'admin-login-failed') {
-        alert('Admin login failed. Incorrect password.');
+        showNotification('Admin login failed. Incorrect password.');
     } else if (data.type === 'typing') {
-        if (data.username !== username) { // Hide for self
+        if (data.username !== username) {
             feedback.innerHTML = `<p id="ti"><em>${data.username} is typing...</em></p>`;
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
     } else if (data.type === 'stop-typing') {
-        if (data.username !== username) { // Hide for self
+        if (data.username !== username) {
             feedback.innerHTML = '';
         }
+    } else if (data.type === 'online-users') {
+        onlineUsersList = data.users.filter(user => user !== username);
     }
 };
 
-function formatMessage(msg) {
-    let messageContent = `<p id="msg-${msg.id}"><strong>${msg.username ? msg.username : ''}</strong>`;
-
-    if (msg.isAdmin) {
-        messageContent += ` (admin):`;
-    } else {
-        messageContent += `:`;
-    }
-
-    messageContent += ` ${msg.message}`;
-
-    if (isAdmin || msg.type === 'user') {
-        messageContent += ` <span class="delete-message" onclick="deleteMessage('${msg.id}')" style="display: ${isAdmin ? 'inline' : 'none'}">Delete</span>`;
-    }
-
-    messageContent += `</p>`;
-
-    return messageContent;
-}
-
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.textContent = message;
-    notification.style.background = 'rgba(0,0,0,0.8)';
-    notification.style.color = 'white';
-    notification.style.padding = '10px';
-    notification.style.margin = '5px';
-    notification.style.borderRadius = '5px';
-    notification.style.textAlign = 'center';
-    notification.style.opacity = '1';
-    notification.style.transition = 'opacity 2s ease-out';
-    
-    notificationContainer.appendChild(notification);
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => notification.remove(), 2000);
-    }, 3000);
-}
-
 ws.onerror = (error) => {
     console.error('WebSocket Error:', error);
+    showNotification('Connection error. Please refresh the page.');
 };
 
 ws.onclose = () => {
     console.log('WebSocket connection closed');
+    showNotification('Connection lost. Attempting to reconnect...');
+    setTimeout(() => window.location.reload(), 5000);
 };

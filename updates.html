@@ -189,7 +189,24 @@
             opacity: 0.2;
         }
 
-
+        .feature-card {
+            background: #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #f39c12;
+        }
+        .feature-title {
+            color: #f39c12;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .screenshot {
+            max-width: 100%;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #555;
+        }
     </style>
     <script>
         function toggleUpdates(id) {
@@ -207,228 +224,228 @@
         <h1>🚀 Chat App Updates</h1>
         <p>Welcome to the update page! Here you can check out the latest changes, upcoming features, and our roadmap. Stay tuned! 🛠️</p>
         
-        <h2>📢 Latest Updates - <span class="version-badge">Version 0.1.2</span> (Feb 22, 2025)</h2>
-        <div class="update">
-            <p><strong>🔔 Mention Notifications:</strong> You’ll now receive in-app notifications when someone mentions you! No more missing important messages.</p>
-            <p><strong>🔴 Highlighted Mentions:</strong> When you mention a valid user with @username, it now turns red (only if the user exists).</p>
-            <p><strong>📜 Message Deletion:</strong> Admins can now delete messages instantly.</p>
-            <h4>🐞 Bug Fixes:</h4>
-            <ul class="bug-list">
-                <li>Fixed message delay issue.</li>
-                <li>Improved WebSocket connection stability.</li>
-                <li>Fixed minor UI glitches in chat interface.</li>
+        <h2>🔥 Latest Updates - <span class="version-badge">Version 0.2.0</span> (April 2025)</h2>
+        
+        <div class="feature-card">
+            <div class="feature-title">💬 Enhanced Mention System</div>
+            <p>We've completely revamped the mention system with smart suggestions:</p>
+            <ul>
+                <li>Type @ to see a dropdown of online users</li>
+                <li>Real-time filtering as you type</li>
+                <li>Click or use keyboard to select mentions</li>
+                <li>Mentions are highlighted in messages</li>
+                <li>Visual indicators for online status</li>
             </ul>
         </div>
         
+        <div class="feature-card">
+            <div class="feature-title">🎨 UI Improvements</div>
+            <p>The chat interface has received a major facelift:</p>
+            <ul>
+                <li>Few changes in UI to make it look more fresh.</li>
+                <li>Your messages now appear on the right side</li>
+                <li>Others' messages appear on the left</li>
+                <li>Different colors for self vs others' messages</li>
+                <li>Admin messages have special styling</li>
+                <li>Improved mobile responsiveness</li>
+            </ul>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-title">🔔 Notification System</div>
+            <p>Never miss important messages:</p>
+            <ul>
+                <li>In-app notifications when mentioned</li>
+                <li>Visual and sound alerts (coming soon)</li>
+                <li>Notification center for missed mentions</li>
+            </ul>
+        </div>
+        
+        <h4>🐞 Bug Fixes & Optimizations:</h4>
+        <ul class="bug-list">
+            <li>Fixed WebSocket connection stability issues</li>
+            <li>Improved message delivery reliability</li>
+            <li>Reduced latency in message rendering</li>
+            <li>Fixed mobile keyboard overlap issues</li>
+            <li>Improved scroll behavior in chat window</li>
+        </ul>
+        
         <h2>🔮 What's Coming Next?</h2>
         <div class="roadmap">
-            <p><strong>👤 Private Messaging:</strong> Soon, you’ll be able to send direct messages to other users!</p>
-            <p><strong>📂 File Sharing:</strong> Upload and share images and files in the chat.</p>
-            <p><strong>🎭 Custom Avatars:</strong> Choose and personalize your profile picture.</p>
-            <p><strong>📡 Improved WebSocket Performance:</strong> Faster message delivery and real-time sync improvements.</p>
+            <p><strong>📂 File Sharing:</strong> Upload and share images, documents, and other files directly in chat.</p>
+            <p><strong>🎨 Custom Themes:</strong> Choose from multiple color schemes or create your own.</p>
+            <p><strong>🔒 End-to-End Encryption:</strong> Optional secure messaging for private conversations.</p>
+            <p><strong>🤖 Chat Bots:</strong> Integrate helpful bots for notifications, reminders, and fun interactions.</p>
+            <p><strong>📱 Mobile App:</strong> Native iOS and Android apps for better mobile experience.</p>
         </div>
         
         <h2 class="expandable" onclick="toggleUpdates('previous-updates')">📜 Previous Updates (Click to Expand) 🔽</h2>
         <div id="previous-updates" class="hidden">
             <div class="previous-update">
+                <h3><span class="version-badge">Version 0.1.2</span> (Feb 22, 2025)</h3>
+                <p><strong>🔔 Mention Notifications:</strong> Basic mention highlighting and notifications.</p>
+                <p><strong>🔴 Simple Mentions:</strong> @username mentions with basic formatting.</p>
+                <p><strong>📜 Message Deletion:</strong> Admins can delete messages.</p>
+            </div>
+            <div class="previous-update">
                 <h3><span class="version-badge">Version 0.1.1</span> (Feb 15, 2025)</h3>
-                <p><strong>🌐 Online Users List:</strong> Added a sidebar showing all currently online users.</p>
-                <p><strong>💬 Command "!online":</strong> Users can now type "!online" to see a list of online members.</p>
-                <p><strong>👑 Admin button:</strong> Admins can login using admin password to moderate the chat.</p>
-                <h4>🐞 Bug Fixes:</h4>
-                <ul class="bug-list">
-                    <li>Fixed username persistence issues.</li>
-                    <li>Enhanced chat input responsiveness.</li>
-                </ul>
+                <p><strong>🌐 Online Users List:</strong> Added !online command to see active users.</p>
+                <p><strong>👑 Admin Login:</strong> Added admin authentication system.</p>
             </div>
             <div class="previous-update">
                 <h3><span class="version-badge">Version 0.1.0</span> (Feb 1, 2025)</h3>
-                <p><strong>🚀 Initial Release:</strong> Basic chat functionality with WebSockets, message sending, and admin moderation.</p>
-                <h4>🐞 Bug Fixes:</h4>
-                <ul class="bug-list">
-                    <li>Fixed login authentication glitches.</li>
-                    <li>Resolved minor lag in message rendering.</li>
-                </ul>
+                <p><strong>🚀 Initial Release:</strong> Basic chat functionality with WebSockets.</p>
             </div>
-        <h2>🔽 Hidden Surprise</h2>
-        <button id="rickroll-btn">Don't Click Me</button>
+            
+            <h2>🔽 Hidden Surprise</h2>
+            <button id="rickroll-btn">Don't Click Me</button>
         </div>
         
-        <p>🚀 Stay tuned for more updates! Follow us for real-time changes and suggestions.</p>
+        <p style="margin-top: 30px; text-align: center;">🚀 Stay tuned for more updates! Follow us for real-time changes and suggestions.</p>
     </div>
+
     <script>
-            // Console easter egg
-            setTimeout(() => {
-                console.log("%cHey there, curious Hacker! 🚀", "color: #f39c12; font-size: 18px;");
-                console.log("Want to contribute? Reach out to us!");
-            }, 1000);
-            // Rickroll Easter Egg
-            document.getElementById("rickroll-btn").addEventListener("click", function () {
-                window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
-            });
+        // Console easter egg
+        setTimeout(() => {
+            console.log("%cHey there, curious Hacker! 🚀", "color: #f39c12; font-size: 18px;");
+            console.log("%cTry the Konami code (↑↑↓↓←→←→BA) or Ctrl+Alt+H for hacker mode!", "color: #3498db; font-size: 14px;");
+        }, 1000);
+        
+        // Rickroll Easter Egg
+        document.getElementById("rickroll-btn").addEventListener("click", function() {
+            window.open("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "_blank");
+        });
 
-            document.addEventListener("DOMContentLoaded", function () {
-                let keys = [];
-                const konamiCode = "38384040373937396665"; // ↑ ↑ ↓ ↓ ← → ← → B A
+        // Konami Code Implementation
+        document.addEventListener("DOMContentLoaded", function() {
+            let keys = [];
+            const konamiCode = "38384040373937396665"; // ↑ ↑ ↓ ↓ ← → ← → B A
 
-                document.addEventListener("keydown", function (e) {
-                    keys.push(e.keyCode);
-                    keys = keys.slice(-10); // Keep last 10 key presses
+            document.addEventListener("keydown", function(e) {
+                keys.push(e.keyCode);
+                keys = keys.slice(-10); // Keep last 10 key presses
 
-                    if (keys.join("") === konamiCode) {
-                        document.body.classList.add("konami-activated");
-
-                        alert("🎮 Konami Code Activated! Welcome to the secret mode!");
-
-                        // Show a hidden dancing GIF (optional)
-                        let gif = document.createElement("img");
-                        gif.src = "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"; // Dancing GIF
-                        gif.id = "secret-gif";
-                        document.body.appendChild(gif);
-                        gif.style.display = "block";
-
-                        setTimeout(() => {
-                            gif.style.display = "none"; // Hide after 10 seconds
-                        }, 10000);
-                    }
-                });
-            });
-            document.addEventListener("DOMContentLoaded", function () {
-                let hackerModeActive = false;
-                let tapCount = 0;
-                let tapTimeout;
-
-                // PC: Keyboard Activation
-                document.addEventListener("keydown", function (e) {
-                    if (e.ctrlKey && e.altKey && e.code === "KeyH") {
-                        if (!hackerModeActive) {
-                            activateHackerMode();
-                        }
-                    }
-                });
-
-                // Mobile: Triple Tap OR Long Press on Title
-                let title = document.querySelector("h1");
-
-                title.addEventListener("touchstart", function (e) {
-                    tapCount++;
-                    if (tapCount === 1) {
-                        tapTimeout = setTimeout(() => (tapCount = 0), 1000); // Reset tap count after 1 sec
-                    }
-                    if (tapCount === 3) {
-                        clearTimeout(tapTimeout);
-                        tapCount = 0;
-                        if (!hackerModeActive) activateHackerMode();
-                    }
-                });
-
-                let longPressTimer;
-                title.addEventListener("touchstart", function () {
-                    longPressTimer = setTimeout(() => {
-                        if (!hackerModeActive) activateHackerMode();
-                    }, 2000); // 2 seconds long press
-                });
-
-                title.addEventListener("touchend", function () {
-                    clearTimeout(longPressTimer);
-                });
-
-                function activateHackerMode() {
-                    hackerModeActive = true;
-                    document.body.classList.add("hacker-mode");
-
-                    let hackerScreen = document.createElement("div");
-                    hackerScreen.id = "hacker-screen";
-                    document.body.appendChild(hackerScreen);
-                    hackerScreen.style.display = "block";
-
-                    let logLines = [
-                        "[ACCESS GRANTED] Initializing terminal...",
-                        "Connecting to main server...",
-                        "Bypassing firewall... ███████░ 85%",
-                        "Decrypting passwords... ████████░ 95%",
-                        "Accessing chat database...",
-                        "Extracting user credentials...",
-                        "Uploading malware... (just kidding 😆)",
-                        "Self-destruct sequence initiated... (jk again!)",
-                        "Returning to normal mode..."
-                    ];
-
-                    let index = 0;
-                    function showHackerText() {
-                        if (index < logLines.length) {
-                            let textLine = document.createElement("p");
-                            textLine.textContent = logLines[index];
-                            hackerScreen.appendChild(textLine);
-                            index++;
-                            setTimeout(showHackerText, 3000);
-                        } else {
-                            setTimeout(deactivateHackerMode, 5000);
-                        }
-                    }
+                if (keys.join("") === konamiCode) {
+                    document.body.classList.add("konami-activated");
+                    alert("🎮 Konami Code Activated! Welcome to the secret mode!");
                     
-                    showHackerText();
-                }
+                    let gif = document.createElement("img");
+                    gif.src = "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif";
+                    gif.id = "secret-gif";
+                    document.body.appendChild(gif);
+                    gif.style.display = "block";
 
-                function deactivateHackerMode() {
-                    document.body.classList.remove("hacker-mode");
-                    let hackerScreen = document.getElementById("hacker-screen");
-                    if (hackerScreen) {
-                        hackerScreen.remove();
-                    }
-                    hackerModeActive = false;
+                    setTimeout(() => {
+                        gif.style.display = "none";
+                    }, 10000);
                 }
             });
-            document.addEventListener("DOMContentLoaded", function () {
-                let elementsToGlitch = document.querySelectorAll("h1, h2, p, .update, .roadmap");
-                let glitchDuration = 5000; // 5 seconds
-                let startTime = Date.now();
-
-                function applyGlitchEffect() {
-                    if (Date.now() - startTime > glitchDuration) return; // Stop after 5 seconds
-
-                    let randomElements = [...elementsToGlitch].sort(() => 0.5 - Math.random()).slice(0, 3); // Select 3 random elements
-                    randomElements.forEach(el => {
-                        el.classList.add("glitch");
-                        setTimeout(() => el.classList.remove("glitch"), 500 + Math.random() * 1000); // Remove after 0.5-1.5s
-                    });
-
-                    setTimeout(applyGlitchEffect, 500 + Math.random() * 1000); // Repeat within the 5s window
-                }
-
-                applyGlitchEffect();
-            });
-
-
-            document.addEventListener("keydown", function (event) {
-                if (event.ctrlKey && event.altKey && event.key.toLowerCase() === "p") {
-                    let command = prompt("🐍 Python Console - Enter a command:");
-                    if (command) {
-                        executePythonCommand(command);
+            
+            // Hacker Mode Activation
+            let hackerModeActive = false;
+            
+            // PC: Keyboard Activation
+            document.addEventListener("keydown", function(e) {
+                if (e.ctrlKey && e.altKey && e.code === "KeyH") {
+                    if (!hackerModeActive) {
+                        activateHackerMode();
                     }
                 }
             });
+            
+            // Mobile: Triple Tap OR Long Press on Title
+            let title = document.querySelector("h1");
+            let tapCount = 0;
+            let tapTimeout;
 
-            function executePythonCommand(command) {
-                let output;
-                try {
-                    if (command.startsWith("print(")) {
-                        output = command.match(/print\(["'](.+?)["']\)/)[1];
-                    } else if (command.startsWith("math(")) {
-                        output = eval(command.match(/math\((.+?)\)/)[1]);
-                    } else if (command.startsWith("reverse(")) {
-                        output = command.match(/reverse\(["'](.+?)["']\)/)[1].split("").reverse().join("");
-                    } else if (command === "secret()") {
-                        output = "🕵️ You found the hidden message!";
+            title.addEventListener("touchstart", function(e) {
+                tapCount++;
+                if (tapCount === 1) {
+                    tapTimeout = setTimeout(() => (tapCount = 0), 1000);
+                }
+                if (tapCount === 3) {
+                    clearTimeout(tapTimeout);
+                    tapCount = 0;
+                    if (!hackerModeActive) activateHackerMode();
+                }
+            });
+
+            let longPressTimer;
+            title.addEventListener("touchstart", function() {
+                longPressTimer = setTimeout(() => {
+                    if (!hackerModeActive) activateHackerMode();
+                }, 2000);
+            });
+
+            title.addEventListener("touchend", function() {
+                clearTimeout(longPressTimer);
+            });
+
+            function activateHackerMode() {
+                hackerModeActive = true;
+                document.body.classList.add("hacker-mode");
+
+                let hackerScreen = document.createElement("div");
+                hackerScreen.id = "hacker-screen";
+                document.body.appendChild(hackerScreen);
+                hackerScreen.style.display = "block";
+
+                let logLines = [
+                    "[ACCESS GRANTED] Initializing terminal...",
+                    "Connecting to main server...",
+                    "Bypassing firewall... ███████░ 85%",
+                    "Decrypting passwords... ████████░ 95%",
+                    "Accessing chat database...",
+                    "Extracting user credentials...",
+                    "Uploading malware... (just kidding 😆)",
+                    "Self-destruct sequence initiated... (jk again!)",
+                    "Returning to normal mode..."
+                ];
+
+                let index = 0;
+                function showHackerText() {
+                    if (index < logLines.length) {
+                        let textLine = document.createElement("p");
+                        textLine.textContent = logLines[index];
+                        hackerScreen.appendChild(textLine);
+                        index++;
+                        setTimeout(showHackerText, 3000);
                     } else {
-                        output = "⚠️ Unknown command!";
+                        setTimeout(deactivateHackerMode, 5000);
                     }
-                } catch {
-                    output = "⚠️ Syntax Error!";
                 }
-                alert(output);
+                
+                showHackerText();
             }
 
+            function deactivateHackerMode() {
+                document.body.classList.remove("hacker-mode");
+                let hackerScreen = document.getElementById("hacker-screen");
+                if (hackerScreen) {
+                    hackerScreen.remove();
+                }
+                hackerModeActive = false;
+            }
+            
+            // Random glitch effect
+            let elementsToGlitch = document.querySelectorAll("h1, h2, p, .update, .roadmap");
+            let glitchDuration = 5000;
+            let startTime = Date.now();
+
+            function applyGlitchEffect() {
+                if (Date.now() - startTime > glitchDuration) return;
+
+                let randomElements = [...elementsToGlitch].sort(() => 0.5 - Math.random()).slice(0, 3);
+                randomElements.forEach(el => {
+                    el.classList.add("glitch");
+                    setTimeout(() => el.classList.remove("glitch"), 500 + Math.random() * 1000);
+                });
+
+                setTimeout(applyGlitchEffect, 500 + Math.random() * 1000);
+            }
+
+            applyGlitchEffect();
+        });
     </script>
 </body>
 </html>
