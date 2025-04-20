@@ -1,4 +1,4 @@
-const ws = new WebSocket('ws://chat-backend-h3jf.onrender.com');
+const ws = new WebSocket('ws://192.168.31.86:3000');
 
 const chatWindow = document.getElementById('chat-window');
 const output = document.getElementById('output');
@@ -9,6 +9,9 @@ const sendButton = document.getElementById('send');
 const adminLoginButton = document.getElementById('admin-login-btn');
 const suggestionsContainer = document.getElementById('suggestions-container');
 const suggestionsList = document.getElementById('suggestions-list');
+const replyPreview = document.getElementById('reply-preview');
+const replyContent = document.getElementById('reply-content');
+const cancelReplyButton = document.getElementById('cancel-reply');
 
 document.body.insertAdjacentHTML('afterbegin', '<div id="notification-container"></div>');
 const notificationContainer = document.getElementById('notification-container');
@@ -19,6 +22,7 @@ let typingTimeout = null;
 let onlineUsersList = [];
 let lastAtPosition = -1;
 let suggestionsVisible = false;
+let replyingTo = null;
 
 if (username) {
     usernameInput.value = username;
@@ -50,6 +54,10 @@ sendButton.addEventListener('click', () => {
 
 adminLoginButton.addEventListener('click', () => {
     adminLogin();
+});
+
+cancelReplyButton.addEventListener('click', () => {
+    cancelReply();
 });
 
 messageInput.addEventListener('input', handleMessageInput);
@@ -164,15 +172,53 @@ document.addEventListener('click', (e) => {
 function sendMessage() {
     const message = messageInput.value.trim();
     if (message && username) {
-        ws.send(JSON.stringify({
+        const messageData = {
             type: 'user',
             username: username,
             message: message
-        }));
+        };
+
+        if (replyingTo) {
+            messageData.replyTo = replyingTo.id;
+            messageData.replyUsername = replyingTo.username;
+            messageData.replyMessage = replyingTo.message;
+        }
+
+        ws.send(JSON.stringify(messageData));
         messageInput.value = '';
         ws.send(JSON.stringify({ type: 'stop-typing', username }));
         hideSuggestions();
+        cancelReply();
     }
+}
+
+function setupReplyHandlers() {
+    document.querySelectorAll('.reply-button').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const messageId = e.target.closest('.message-other, .message-self').id.replace('msg-', '');
+            const message = messages.find(m => m.id == messageId);
+            if (message) {
+                setReply(message);
+            }
+        });
+    });
+}
+
+function setReply(message) {
+    replyingTo = {
+        id: message.id,
+        username: message.username,
+        message: message.message
+    };
+    
+    replyContent.innerHTML = `<strong>${message.username}</strong>: ${message.message.substring(0, 50)}${message.message.length > 50 ? '...' : ''}`;
+    replyPreview.style.display = 'flex';
+    messageInput.focus();
+}
+
+function cancelReply() {
+    replyingTo = null;
+    replyPreview.style.display = 'none';
 }
 
 function adminLogin() {
@@ -207,7 +253,24 @@ function formatMessage(msg) {
         return `<span class="mention-highlight" ${isOnline ? 'title="User is online"' : ''}>@${username}</span>`;
     });
 
-    let messageContent = `<div class="${messageClass}" id="msg-${msg.id}"><strong>${msg.username ? msg.username : ''}</strong>`;
+    let messageContent = `<div class="${messageClass}" id="msg-${msg.id}">`;
+
+    // Add original message if this is a reply
+    if (msg.replyTo) {
+        const originalMessage = messages.find(m => m.id == msg.replyTo);
+        if (originalMessage) {
+            const originalText = originalMessage.message.substring(0, 50) + 
+                              (originalMessage.message.length > 50 ? '...' : '');
+            messageContent += `
+                <div class="reply-container">
+                    <div class="reply-original">
+                        <strong>${originalMessage.username}</strong>: ${originalText}
+                    </div>
+                </div>`;
+        }
+    }
+
+    messageContent += `<strong>${msg.username ? msg.username : ''}</strong>`;
 
     if (msg.isAdmin) {
         messageContent += ` (admin):`;
@@ -216,6 +279,11 @@ function formatMessage(msg) {
     }
 
     messageContent += ` ${formattedMessage}`;
+
+    // Add reply button
+    if (!isCurrentUser) {
+        messageContent += ` <button class="reply-button" style="background: none; border: none; color: #4CAF50; cursor: pointer;">↩️</button>`;
+    }
 
     if (isAdmin || msg.type === 'user') {
         messageContent += ` <span class="delete-message" onclick="deleteMessage('${msg.id}')" style="display: ${isAdmin ? 'inline' : 'none'}">Delete</span>`;
@@ -238,16 +306,22 @@ function showNotification(message) {
     }, 3000);
 }
 
+let messages = [];
+
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
     if (data.type === 'init') {
-        output.innerHTML = data.messages.map(msg => formatMessage(msg)).join('');
+        messages = data.messages;
+        output.innerHTML = messages.map(msg => formatMessage(msg)).join('');
         chatWindow.scrollTop = chatWindow.scrollHeight;
+        setupReplyHandlers();
     } else if (data.type === 'user' || data.type === 'system') {
         feedback.innerHTML = '';
+        messages.push(data);
         output.innerHTML += formatMessage(data);
         chatWindow.scrollTop = chatWindow.scrollHeight;
+        setupReplyHandlers();
 
         if (data.message.includes(`@${username}`)) {
             showNotification(`You were mentioned by ${data.username}`);
@@ -257,6 +331,7 @@ ws.onmessage = (event) => {
         if (deletedMessage) {
             deletedMessage.remove();
         }
+        messages = messages.filter(msg => msg.id != data.messageId);
     } else if (data.type === 'admin-login-success') {
         isAdmin = true;
         showNotification('Admin login successful');

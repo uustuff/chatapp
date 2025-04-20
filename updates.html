@@ -207,6 +207,61 @@
             margin: 10px 0;
             border: 1px solid #555;
         }
+        
+        /* New styles for reply demo */
+        .reply-demo {
+            background: #252525;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #444;
+        }
+        .demo-message {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            max-width: 80%;
+        }
+        .demo-original {
+            background: #3a3a3a;
+            color: #aaa;
+            font-size: 0.9em;
+            padding: 8px;
+            border-left: 3px solid #4CAF50;
+            margin-bottom: 5px;
+        }
+        .demo-reply {
+            background: #4a4a4a;
+            margin-left: 20px;
+            border-left: 2px solid rgba(76, 175, 80, 0.5);
+            padding-left: 10px;
+        }
+        .demo-self {
+            background: #006064;
+            margin-left: auto;
+            color: #e0e0e0;
+        }
+        .demo-other {
+            background: #263238;
+            margin-right: auto;
+            color: #e0e0e0;
+        }
+        .demo-preview {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-left: 3px solid #4CAF50;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .demo-cancel {
+            background: none;
+            border: none;
+            color: #ff5555;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
     </style>
     <script>
         function toggleUpdates(id) {
@@ -224,11 +279,41 @@
         <h1>🚀 Chat App Updates</h1>
         <p>Welcome to the update page! Here you can check out the latest changes, upcoming features, and our roadmap. Stay tuned! 🛠️</p>
         
-        <h2>🔥 Latest Updates - <span class="version-badge">Version 0.2.0</span> (April 2025)</h2>
+        <h2>🔥 Latest Updates - <span class="version-badge">Version 0.3.0</span> (May 2025)</h2>
+        
+        <div class="feature-card">
+            <div class="feature-title">💬 Threaded Replies</div>
+            <p>We've added a powerful new way to reply to specific messages in conversations:</p>
+            
+            <div class="reply-demo">
+                <div class="demo-message demo-other">
+                    <strong>Alice:</strong> Has anyone seen the latest project requirements?<button class="demo-cancel">↩️</button>
+                </div>
+                <div class="demo-message demo-self">
+                    <strong>You:</strong> 
+                    <div class="demo-original">
+                        <strong>Alice:</strong> Has anyone seen the latest project requirements?
+                    </div>
+                    Yes, I've reviewed them. The deadline seems tight but manageable.
+                </div>
+                <div class="demo-preview">
+                    <div>Replying to <strong>Alice:</strong> Has anyone seen the latest...</div>
+                    <button class="demo-cancel">×</button>
+                </div>
+            </div>
+            
+            <ul>
+                <li>Click the reply button (↩️) on any message to start a threaded reply</li>
+                <li>The original message appears above your reply for context</li>
+                <li>Reply preview sticks to the bottom of the chat window while composing</li>
+                <li>Cancel replies with the × button if you change your mind</li>
+                <li>Visual threading with indentation and connecting lines</li>
+            </ul>
+        </div>
         
         <div class="feature-card">
             <div class="feature-title">💬 Enhanced Mention System</div>
-            <p>We've completely revamped the mention system with smart suggestions:</p>
+            <p>Improved version of our mention system with smart suggestions:</p>
             <ul>
                 <li>Type @ to see a dropdown of online users</li>
                 <li>Real-time filtering as you type</li>
@@ -242,7 +327,6 @@
             <div class="feature-title">🎨 UI Improvements</div>
             <p>The chat interface has received a major facelift:</p>
             <ul>
-                <li>Few changes in UI to make it look more fresh.</li>
                 <li>Your messages now appear on the right side</li>
                 <li>Others' messages appear on the left</li>
                 <li>Different colors for self vs others' messages</li>
@@ -268,6 +352,7 @@
             <li>Reduced latency in message rendering</li>
             <li>Fixed mobile keyboard overlap issues</li>
             <li>Improved scroll behavior in chat window</li>
+            <li>Fixed reply positioning in threaded conversations</li>
         </ul>
         
         <h2>🔮 What's Coming Next?</h2>
@@ -277,13 +362,19 @@
             <p><strong>🔒 End-to-End Encryption:</strong> Optional secure messaging for private conversations.</p>
             <p><strong>🤖 Chat Bots:</strong> Integrate helpful bots for notifications, reminders, and fun interactions.</p>
             <p><strong>📱 Mobile App:</strong> Native iOS and Android apps for better mobile experience.</p>
+            <p><strong>🧵 Thread Management:</strong> Better tools for following and organizing threaded conversations.</p>
         </div>
         
         <h2 class="expandable" onclick="toggleUpdates('previous-updates')">📜 Previous Updates (Click to Expand) 🔽</h2>
         <div id="previous-updates" class="hidden">
             <div class="previous-update">
+                <h3><span class="version-badge">Version 0.2.0</span> (April 2025)</h3>
+                <p><strong>🔔 Mention System:</strong> Initial implementation of user mentions.</p>
+                <p><strong>🎨 UI Refresh:</strong> Improved message bubbles and layout.</p>
+            </div>
+            <div class="previous-update">
                 <h3><span class="version-badge">Version 0.1.2</span> (Feb 22, 2025)</h3>
-                <p><strong>🔔 Mention Notifications:</strong> Basic mention highlighting and notifications.</p>
+                <p><strong>🔔 Basic Notifications:</strong> Simple mention highlighting.</p>
                 <p><strong>🔴 Simple Mentions:</strong> @username mentions with basic formatting.</p>
                 <p><strong>📜 Message Deletion:</strong> Admins can delete messages.</p>
             </div>
