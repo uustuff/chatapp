@@ -20,18 +20,29 @@
         
         <input type="text" id="username" placeholder="Enter your username">
         <button id="admin-login-btn" style="display: none;">Login as Admin</button>
-        
-        <input type="text" id="message" placeholder="Type your message" autocomplete="off">
-        <div id="suggestions-container" style="display: none;">
-            <div id="suggestions-list"></div>
-        </div>
-        <button id="send">Send</button>
         <a href="updates.html" target="_blank" id="updates-bell">
             <svg id="bell-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
         </a>
+        
+        <div id="message-input-container">
+            <input type="text" id="message" placeholder="Type your message" autocomplete="off">
+            <div id="suggestions-container" style="display: none;">
+                <div id="suggestions-list"></div>
+            </div>
+            <button id="send">Send</button>
+            <label for="file-upload" id="file-upload-label" title="Upload file (max 10MB)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <input type="file" id="file-upload" style="display: none;">
+            </label>
+        </div>
+        
     </div>
     <script src="app.js"></script>
 </body>

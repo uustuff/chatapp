@@ -157,6 +157,7 @@ em {
 
 @media (max-width: 768px) {
     #username {
+        height: 10px;
         font-size: medium;
     }
     
@@ -170,7 +171,7 @@ em {
     }
     
     #admin-login-btn {
-        font-size: medium;
+        font-size: 14px;
     }
     
     #chat-container {
@@ -202,7 +203,7 @@ strong {
     margin-bottom: 10px;
     cursor: pointer;
     padding: 10px;
-    font-size: 0.9rem;
+    font-size: 10px;
     transition: 0.2s;
     border-radius: 10px;
 }
@@ -212,7 +213,7 @@ strong {
 }
 
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
     height: 5px;
 }
 
@@ -222,23 +223,27 @@ strong {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, rgb(151, 94, 8) 10%, rgb(138, 147, 14) 20%, rgba(79,220,74,1) 30%, rgba(63,218,216,1) 40%, rgba(47,201,226,1) 50%, rgba(28,127,238,1) 60%, rgb(19, 98, 189) 70%, rgb(68, 0, 203) 80%);
+    background: linear-gradient(180deg, #910b0b, #67872b); /* metallic silver-gray */
     border-radius: 10px;
 }
 
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #718f25, #971212);
+}
+
+
 #updates-bell {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    cursor: pointer;
-    z-index: 1000;
-    display: flex;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px;
+    margin-left: 10px; /* small gap after admin button */
+    padding: 2px;
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.6);
     transition: background-color 0.3s ease;
+    text-decoration: none;
 }
 
 #updates-bell:hover {
@@ -421,4 +426,127 @@ strong {
 
 .reply-button:hover {
     color: #3d8b40;
+}
+
+/* File upload styles */
+#message-input-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+}
+
+#file-upload-label {
+    background-color: #515151;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    border: 1px solid #000;
+    box-shadow: 0px 0px 10px rgb(0, 0, 0);
+}
+
+#file-upload-label:hover {
+    background-color: #7c7c7c;
+}
+
+#file-upload-label svg {
+    width: 20px;
+    height: 20px;
+}
+
+.file-message {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 8px;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.file-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.file-download {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: auto;
+}
+
+.file-download:hover {
+    text-decoration: underline;
+}
+
+.file-size {
+    font-size: 0.8em;
+    color: #aaa;
+}
+
+.progress-container {
+    width: 100%;
+    background-color: #333;
+    border-radius: 5px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 5px;
+    background-color: #4CAF50;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+/* File type specific icons */
+.file-icon.pdf {
+    color: #e74c3c;
+}
+
+.file-icon.image {
+    color: #3498db;
+}
+
+.file-icon.video {
+    color: #9b59b6;
+}
+
+.file-icon.audio {
+    color: #f39c12;
+}
+
+.file-icon.document {
+    color: #2ecc71;
+}
+
+.file-icon.archive {
+    color: #e67e22;
+}
+
+.file-icon.other {
+    color: #95a5a6;
+}
+
+#kg {
+    background: linear-gradient(90deg, #d4af37, #b8860b, #d4af37); /* golden banner gradient */
+    color: #970000; /* very light ivory color for text */
+    font-family:Arial, Helvetica, sans-serif; /* royal-style font */
+    font-weight: bold;
+    padding: 4px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.6); /* soft golden glow */
+    letter-spacing: 1.5px;
 }
