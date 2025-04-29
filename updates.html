@@ -278,7 +278,6 @@
             border: 1px solid #444;
         }
         .file-item {
-            display: flex;
             align-items: center;
             padding: 10px;
             margin: 5px 0;
@@ -314,61 +313,6 @@
             background: #45a049;
         }
         
-        /* UI adjustments demo */
-        .ui-demo {
-            background: #252525;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            border: 1px solid #444;
-        }
-        .ui-row {
-            padding: 0 15px 0 15px;
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .ui-label {
-            width: 120px;
-            font-weight: bold;
-        }
-        .ui-element {
-            flex-grow: 1;
-            padding: 8px;
-            border-radius: 5px;
-            background: #3a3a3a;
-            border: 1px solid #555;
-            color: white;
-        }
-        .ui-button {
-            padding: 8px 15px;
-            border-radius: 5px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .ui-button.send {
-            background: #2196F3;
-            width: 80px;
-        }
-        .ui-button.admin {
-            background: #f39c12;
-            width: 120px;
-        }
-        .ui-bell {
-            background: #9b59b6;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            margin-left: 10px;
-        }
     </style>
     <script>
         function toggleUpdates(id) {
@@ -386,7 +330,7 @@
         <h1>🚀 Chat App Updates</h1>
         <p>Welcome to the update page! Here you can check out the latest changes, upcoming features, and our roadmap. Stay tuned! 🛠️</p>
         
-        <h2>🔥 Latest Updates - <span class="version-badge">Version 0.3.2</span> ( 2025)</h2>
+        <h2>🔥 Latest Updates - <span class="version-badge">Version 0.3.2</span> (May 2025)</h2>
         
         <div class="feature-card">
             <div class="feature-title">📁 File Upload & Sharing</div>
@@ -424,23 +368,7 @@
         
         <div class="feature-card">
             <div class="feature-title">🛠️ UI Adjustments & Improvements</div>
-            <p>This is just a small replica of what changes are like:</p>
             
-            <div class="ui-demo">
-                <div class="ui-row">
-                    <input type="text" class="ui-element" placeholder="Enter your username">
-                    <div class="ui-row">
-                        <button class="ui-button admin">Admin Login</button>
-                        <button class="ui-bell">🔔</button>
-                    </div>
-                </div>
-                <div class="ui-row">
-                    <input type="text" class="ui-element" placeholder="Type your message here">
-                    <div class="ui-row">
-                        <button class="ui-button send">Send</button>
-                    </div>     
-                </div>
-            </div>
             
             <ul>
                 <li>Notification bell moved from top to beside admin login button</li>
