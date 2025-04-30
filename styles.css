@@ -197,6 +197,8 @@ strong {
 }
 
 #admin-login-btn {
+    position: relative;
+    top: -3px;
     background-color: #333;
     color: #ddd;
     border: 1px solid #555;
@@ -233,6 +235,8 @@ strong {
 
 
 #updates-bell {
+    position: relative;
+    top: 9px;
     width: 20px;
     height: 20px;
     display: inline-flex;
