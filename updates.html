@@ -330,7 +330,43 @@
         <h1>🚀 Chat App Updates</h1>
         <p>Welcome to the update page! Here you can check out the latest changes, upcoming features, and our roadmap. Stay tuned! 🛠️</p>
         
-        <h2>🔥 Latest Updates - <span class="version-badge">Version 0.3.2</span> (May 2025)</h2>
+        <h2>🔥 Latest Updates - <span class="version-badge">Version 0.3.4</span> (May 2025)</h2>
+        
+        <div class="feature-card">
+            <div class="feature-title">📜 Rules & Terms Acceptance</div>
+            <p>We've added a mandatory popup that all users must accept before using the chat:</p>
+            
+            <ul>
+                <li>New users see the popup immediately upon joining</li>
+                <li>Existing users will see it once after updating</li>
+                <li>Users must click "Accept" to continue using the chat</li>
+                <li>Popup can be reviewed later through the settings menu</li>
+                <li>Improved community safety and awareness</li>
+            </ul>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-title">💾 Message Persistence with Local Storage</div>
+            <p>Messages are now cached in browser's local storage to prevent complete loss during server restarts:</p>
+            
+            <ul>
+                <li>Last 200 messages are stored in browser's local storage</li>
+                <li>Messages persist even if server restarts</li>
+                <li>When reconnecting, messages are restored from local storage</li>
+                <li>New messages from server replace the oldest cached messages</li>
+                <li>Storage is automatically cleared if unused for 30 days</li>
+                <li>Users can manually clear chat history from settings</li>
+            </ul>
+            
+            <h4>🐞 Fixed Issues:</h4>
+            <ul class="bug-list">
+                <li>Fixed complete message loss when server restarted</li>
+                <li>Resolved occasional duplicate messages during restoration</li>
+                <li>Fixed timestamp display issues with restored messages</li>
+            </ul>
+        </div>
+        
+        <h2>🔥 Previous Updates - <span class="version-badge">Version 0.3.2</span> (May 2025)</h2>
         
         <div class="feature-card">
             <div class="feature-title">📁 File Upload & Sharing</div>
@@ -368,7 +404,6 @@
         
         <div class="feature-card">
             <div class="feature-title">🛠️ UI Adjustments & Improvements</div>
-            
             
             <ul>
                 <li>Notification bell moved from top to beside admin login button</li>
