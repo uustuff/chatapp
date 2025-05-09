@@ -26,6 +26,7 @@
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
         </a>
+        <button id="show-rules-btn" title="Show Rules">📜</button>
         
         <div id="message-input-container">
             <input type="text" id="message" placeholder="Type your message" autocomplete="off">
@@ -43,6 +44,54 @@
             </label>
         </div>
         
+    </div>
+
+    <div id="rules-popup" class="popup-container">
+        <div class="popup-content">
+            <h2>Welcome to Closebook Chat!</h2>
+            <div class="rules-section">
+                <h3>📜 Rules & Regulations:</h3>
+                <ul>
+                    <li>✅ Be respectful to all users</li>
+                    <li>🚫 No harassment, hate speech, or bullying</li>
+                    <li>🔞 No NSFW or inappropriate content</li>
+                    <li>📛 No spamming or flooding the chat</li>
+                    <li>🛑 No sharing of personal information</li>
+                    <li>⚖️ Admins have final say in moderation</li>
+                </ul>
+            </div>
+            
+            <div class="commands-section">
+                <h3>⌨️ Available Commands:</h3>
+                <ul>
+                    <li><strong>!online</strong> - Show who's currently online</li>
+                    <li><strong>@username</strong> - Mention another user</li>
+                    <li><strong>Click ↩️</strong> on a message to reply</li>
+                </ul>
+            </div>
+            
+            <div class="terms-section">
+                <h3>📜 Terms & Conditions</h3>
+                <div class="scrollable-terms">
+                    <p><strong>By using Closebook Chat, you agree to:</strong></p>
+                    <ul>
+                        <li>✅ Be at least <strong>13 years old</strong></li>
+                        <li>🚫 No harassment, hate speech, or illegal content</li>
+                        <li>🔒 Respect privacy—no doxxing or personal info sharing</li>
+                        <li>⚖️ Admins can ban users without warning</li>
+                        <li>📊 Messages are stored temporarily for moderation</li>
+                    </ul>
+                    <p><em>Violations may result in bans. Use responsibly.</em></p>
+                </div>
+            </div>
+            
+            <div class="popup-footer">
+                <label>
+                    <input type="checkbox" id="dont-show-again"> Don't show this again
+                </label>
+                <button id="accept-rules">I Accept & Continue</button>
+            </div>
+        </div>
     </div>
     <script src="app.js"></script>
 </body>

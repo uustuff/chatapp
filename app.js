@@ -1,4 +1,6 @@
-const ws = new WebSocket('ws://chat-backend-h3jf.onrender.com');
+
+
+const ws = new WebSocket('ws://192.168.28.251:3000');
 
 const chatWindow = document.getElementById('chat-window');
 const output = document.getElementById('output');
@@ -15,8 +17,42 @@ const cancelReplyButton = document.getElementById('cancel-reply');
 const fileUploadInput = document.getElementById('file-upload');
 const fileUploadLabel = document.getElementById('file-upload-label');
 
+// Rules Popup Functionality
+const RULES_ACCEPTED_KEY = 'rules_accepted';
+const rulesPopup = document.getElementById('rules-popup');
+const dontShowAgain = document.getElementById('dont-show-again');
+const acceptRulesBtn = document.getElementById('accept-rules');
+
+function showRulesPopup() {
+    const rulesAccepted = localStorage.getItem(RULES_ACCEPTED_KEY);
+    if (!rulesAccepted) {
+        rulesPopup.style.display = 'flex';
+    }
+}
+
+function hideRulesPopup() {
+    rulesPopup.style.display = 'none';
+    if (dontShowAgain.checked) {
+        localStorage.setItem(RULES_ACCEPTED_KEY, 'true');
+    }
+}
+
+acceptRulesBtn.addEventListener('click', hideRulesPopup);
+
+// Initialize the popup
+showRulesPopup();
+
 document.body.insertAdjacentHTML('afterbegin', '<div id="notification-container"></div>');
 const notificationContainer = document.getElementById('notification-container');
+
+
+document.getElementById('show-rules-btn')?.addEventListener('click', () => {
+    rulesPopup.style.display = 'flex';
+});
+
+// Storage constants
+const MAX_STORED_MESSAGES = 200;
+const MESSAGES_STORAGE_KEY = 'chat_messages';
 
 let username = localStorage.getItem('username') || '';
 let isAdmin = false;
@@ -26,6 +62,16 @@ let lastAtPosition = -1;
 let suggestionsVisible = false;
 let replyingTo = null;
 let messages = [];
+
+
+// Load messages from localStorage while waiting for server
+const storedMessages = JSON.parse(localStorage.getItem(MESSAGES_STORAGE_KEY)) || [];
+if (storedMessages.length > 0) {
+    messages = storedMessages;
+    output.innerHTML = messages.map(msg => formatMessage(msg)).join('');
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+    setupReplyHandlers();
+}
 
 if (username) {
     usernameInput.value = username;
@@ -453,18 +499,49 @@ function showNotification(message) {
     }, 3000);
 }
 
+function cleanupOldMessages() {
+    const storedMessages = JSON.parse(localStorage.getItem(MESSAGES_STORAGE_KEY)) || [];
+    if (storedMessages.length > MAX_STORED_MESSAGES) {
+        // Sort by timestamp (newest first)
+        storedMessages.sort((a, b) => (b.timestamp || b.id) - (a.timestamp || a.id));
+        // Keep only the most recent messages
+        const recentMessages = storedMessages.slice(0, MAX_STORED_MESSAGES);
+        localStorage.setItem(MESSAGES_STORAGE_KEY, JSON.stringify(recentMessages));
+    }
+}
+
+// Call cleanup on startup
+cleanupOldMessages();
+
 // WebSocket Event Handlers
 ws.onmessage = (event) => {
     const data = JSON.parse(event.data);
 
     if (data.type === 'init') {
-        messages = data.messages;
+        // Try to load messages from localStorage first
+        const storedMessages = JSON.parse(localStorage.getItem(MESSAGES_STORAGE_KEY)) || [];
+        // Combine stored messages with server messages, removing duplicates
+        const allMessages = [...new Map([...storedMessages, ...data.messages].map(msg => [msg.id, msg])).values()];
+        
+        // Sort by timestamp (or id if timestamp doesn't exist)
+        allMessages.sort((a, b) => (a.timestamp || a.id) - (b.timestamp || b.id));
+        
+        // Keep only the most recent messages
+        messages = allMessages.slice(-MAX_STORED_MESSAGES);
+        localStorage.setItem(MESSAGES_STORAGE_KEY, JSON.stringify(messages));
+        
         output.innerHTML = messages.map(msg => formatMessage(msg)).join('');
         chatWindow.scrollTop = chatWindow.scrollHeight;
         setupReplyHandlers();
     } else if (data.type === 'user' || data.type === 'file' || data.type === 'system') {
         feedback.innerHTML = '';
         messages.push(data);
+        
+        // Update localStorage with new messages
+        const storedMessages = JSON.parse(localStorage.getItem(MESSAGES_STORAGE_KEY)) || [];
+        const updatedMessages = [...storedMessages, data].slice(-MAX_STORED_MESSAGES);
+        localStorage.setItem(MESSAGES_STORAGE_KEY, JSON.stringify(updatedMessages));
+        
         output.innerHTML += formatMessage(data);
         chatWindow.scrollTop = chatWindow.scrollHeight;
         setupReplyHandlers();
@@ -478,6 +555,11 @@ ws.onmessage = (event) => {
             deletedMessage.remove();
         }
         messages = messages.filter(msg => msg.id != data.messageId);
+        
+        // Update localStorage after deletion
+        const storedMessages = JSON.parse(localStorage.getItem(MESSAGES_STORAGE_KEY)) || [];
+        const updatedMessages = storedMessages.filter(msg => msg.id != data.messageId);
+        localStorage.setItem(MESSAGES_STORAGE_KEY, JSON.stringify(updatedMessages));
     } else if (data.type === 'admin-login-success') {
         isAdmin = true;
         showNotification('Admin login successful');
