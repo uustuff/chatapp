@@ -1,22 +1,3 @@
-
-
-const ws = new WebSocket('ws://chat-backend-h3jf.onrender.com');
-
-const chatWindow = document.getElementById('chat-window');
-const output = document.getElementById('output');
-const feedback = document.getElementById('feedback');
-const messageInput = document.getElementById('message');
-const usernameInput = document.getElementById('username');
-const sendButton = document.getElementById('send');
-const adminLoginButton = document.getElementById('admin-login-btn');
-const suggestionsContainer = document.getElementById('suggestions-container');
-const suggestionsList = document.getElementById('suggestions-list');
-const replyPreview = document.getElementById('reply-preview');
-const replyContent = document.getElementById('reply-content');
-const cancelReplyButton = document.getElementById('cancel-reply');
-const fileUploadInput = document.getElementById('file-upload');
-const fileUploadLabel = document.getElementById('file-upload-label');
-
 // Rules Popup Functionality
 const RULES_ACCEPTED_KEY = 'rules_accepted';
 const rulesPopup = document.getElementById('rules-popup');
@@ -41,6 +22,23 @@ acceptRulesBtn.addEventListener('click', hideRulesPopup);
 
 // Initialize the popup
 showRulesPopup();
+
+const ws = new WebSocket('ws://chat-backend-h3jf.onrender.com/');
+
+const chatWindow = document.getElementById('chat-window');
+const output = document.getElementById('output');
+const feedback = document.getElementById('feedback');
+const messageInput = document.getElementById('message');
+const usernameInput = document.getElementById('username');
+const sendButton = document.getElementById('send');
+const adminLoginButton = document.getElementById('admin-login-btn');
+const suggestionsContainer = document.getElementById('suggestions-container');
+const suggestionsList = document.getElementById('suggestions-list');
+const replyPreview = document.getElementById('reply-preview');
+const replyContent = document.getElementById('reply-content');
+const cancelReplyButton = document.getElementById('cancel-reply');
+const fileUploadInput = document.getElementById('file-upload');
+const fileUploadLabel = document.getElementById('file-upload-label');
 
 document.body.insertAdjacentHTML('afterbegin', '<div id="notification-container"></div>');
 const notificationContainer = document.getElementById('notification-container');
